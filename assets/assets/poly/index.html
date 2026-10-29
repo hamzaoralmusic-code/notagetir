@@ -1,0 +1,14 @@
+<!doctype html>
+<meta charset="utf-8">
+<!-- Android: a hidden WebView runs the AI chord finder (lib/core/poly_android.dart) -->
+<script src="ng_poly.js"></script>
+<script>
+  // base64 of float32 little-endian mono 22050 Hz → JSON of the notes
+  window.ngPolyB64 = async (b64) => {
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const notes = await ngPoly(new Float32Array(bytes.buffer), null, 'bp/model.json');
+    return JSON.stringify(notes);
+  };
+</script>
